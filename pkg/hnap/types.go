@@ -75,7 +75,7 @@ type MotoStatusSoftwareResponse struct {
 	CustomerVersion string `json:"StatusSoftwareCustomerVer"`
 }
 
-type MotoStatusConnectionInfoResponse struct {
+type CustomerStatusConnectionInfoResponse struct {
 	Uptime        string `json:"MotoConnSystemUpTime"`
 	NetworkAccess string `json:"MotoConnNetworkAccess"`
 }

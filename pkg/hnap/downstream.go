@@ -107,7 +107,7 @@ type DownstreamChannelResponse struct {
 
 func (r *DownstreamChannelResponse) UnmarshalJSON(data []byte) error {
 	var innerType struct {
-		MotoConnDownstreamChannel string
+		CustomerConnDownstreamChannel string
 	}
 
 	err := json.Unmarshal(data, &innerType)
@@ -115,7 +115,7 @@ func (r *DownstreamChannelResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	tbl := plustable.Parse(innerType.MotoConnDownstreamChannel)
+	tbl := plustable.Parse(innerType.CustomerConnDownstreamChannel)
 	info := make([]DownstreamInfo, len(tbl))
 	for i, row := range tbl {
 		err = info[i].Parse(row)

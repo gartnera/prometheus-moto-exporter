@@ -8,13 +8,13 @@ const (
 	GetHomeAddress    = "GetHomeAddress"
 	GetHomeConnection = "GetHomeConnection"
 
-	GetMotoLagStatus                   = "GetMotoLagStatus"
-	GetMotoStatusConnectionInfo        = "GetMotoStatusConnectionInfo"
-	GetMotoStatusDownstreamChannelInfo = "GetMotoStatusDownstreamChannelInfo"
-	GetMotoStatusLog                   = "GetMotoStatusLog"
-	GetMotoStatusSoftware              = "GetMotoStatusSoftware"
-	GetMotoStatusStartupSequence       = "GetMotoStatusStartupSequence"
-	GetMotoStatusUpstreamChannelInfo   = "GetMotoStatusUpstreamChannelInfo"
+	GetMotoLagStatus                       = "GetMotoLagStatus"
+	GetCustomerStatusConnectionInfo        = "GetCustomerStatusConnectionInfo"
+	GetCustomerStatusDownstreamChannelInfo = "GetCustomerStatusDownstreamChannelInfo"
+	GetMotoStatusLog                       = "GetMotoStatusLog"
+	GetMotoStatusSoftware                  = "GetMotoStatusSoftware"
+	GetCustomerStatusStartupSequence       = "GetMotoStatusStartupSequence"
+	GetCusotmerStatusUpstreamChannelInfo   = "GetCustomerStatusUpstreamChannelInfo"
 )
 
 // {

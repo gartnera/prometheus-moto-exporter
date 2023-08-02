@@ -64,6 +64,12 @@ func (g *Gatherer) Login() error {
 		loginURI    = "http://purenetworks.com/HNAP1/Login"
 	)
 
+	// TODO: only login on interval
+	// to prevent rate limiting
+	if len(g.privateKey) != 0 {
+		return nil
+	}
+
 	log := logrus.WithField("action", "login")
 
 	// 1. Request challenge, uid, and public key from endpoint. We have to use a
@@ -201,15 +207,8 @@ func (g *Gatherer) Gather() (*Collection, error) {
 	log := logrus.WithField("action", actionURI)
 
 	data, err := json.Marshal(hnap.GetMultipleRequestData(
-		hnap.GetHomeAddress,
-		hnap.GetHomeConnection,
-		hnap.GetMotoLagStatus,
-		hnap.GetMotoStatusConnectionInfo,
-		hnap.GetMotoStatusDownstreamChannelInfo,
-		hnap.GetMotoStatusLog,
-		hnap.GetMotoStatusSoftware,
-		hnap.GetMotoStatusStartupSequence,
-		hnap.GetMotoStatusUpstreamChannelInfo,
+		hnap.GetCustomerStatusDownstreamChannelInfo,
+		hnap.GetCusotmerStatusUpstreamChannelInfo,
 	))
 	if err != nil {
 		return nil, err
@@ -244,25 +243,16 @@ func (g *Gatherer) Gather() (*Collection, error) {
 		// Raw JSON string
 		logrus.WithField("name", k).Tracef("%s", v)
 	}
+	log.Debugf("response: %#v\n", response)
 
 	var (
-		upstream       hnap.UpstreamChannelResponse
-		downstream     hnap.DownstreamChannelResponse
-		connection     hnap.HomeConnectionResponse
-		startup        hnap.MotoStatusStartupSequenceResponse
-		homeAddress    hnap.HomeAddressResponse
-		software       hnap.MotoStatusSoftwareResponse
-		connectionInfo hnap.MotoStatusConnectionInfoResponse
+		upstream   hnap.UpstreamChannelResponse
+		downstream hnap.DownstreamChannelResponse
 	)
 
 	parses := map[string]interface{}{
-		hnap.GetMotoStatusDownstreamChannelInfo: &downstream,
-		hnap.GetMotoStatusUpstreamChannelInfo:   &upstream,
-		hnap.GetHomeAddress:                     &homeAddress,
-		hnap.GetMotoStatusSoftware:              &software,
-		hnap.GetMotoStatusConnectionInfo:        &connectionInfo,
-		hnap.GetHomeConnection:                  &connection,
-		hnap.GetMotoStatusStartupSequence:       &startup,
+		hnap.GetCustomerStatusDownstreamChannelInfo: &downstream,
+		hnap.GetCusotmerStatusUpstreamChannelInfo:   &upstream,
 	}
 
 	for name, binding := range parses {
@@ -274,21 +264,12 @@ func (g *Gatherer) Gather() (*Collection, error) {
 		if err != nil {
 			return nil, fmt.Errorf("cannot parse data: %w", err)
 		}
+		fmt.Printf("%s %#v\n", name, binding)
 	}
 
 	return &Collection{
 		Upstream:   upstream.Channels,
 		Downstream: downstream.Channels,
-
-		Online: connection.Online == hnap.Connected,
-
-		SoftwareVersion: software.SoftwareVersion,
-		SpecVersion:     software.SpecVersion,
-		HardwareVersion: software.HardwareVersion,
-		SerialNumber:    software.SerialNumber,
-
-		CustomerVersion: software.CustomerVersion,
-		BootFile:        startup.ConfigurationFileName,
 	}, nil
 }
 

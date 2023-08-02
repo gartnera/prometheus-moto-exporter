@@ -111,11 +111,11 @@ func (s *Server) Collect() error {
 
 	err := s.gatherer.Login()
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to login: %w", err)
 	}
 	collect, err := s.gatherer.Gather()
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to gather: %w", err)
 	}
 
 	for _, info := range collect.Downstream {
